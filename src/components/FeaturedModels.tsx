@@ -2,325 +2,221 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { ArrowRight, Zap, Gauge, Cpu } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const models = [
   {
     id: "sedan",
     category: "SEDAN",
-    name: "BMW 5 Series",
-    tagline: "Intelligent Luxury Redefined",
-    horsepower: "375 hp",
-    acceleration: "4.1s",
-    topSpeed: "155 mph",
+    name: "5 Series",
+    power: "375 hp",
+    accel: "4.1s",
     price: "From $56,400",
-    gradient: "from-[#1c6ed4] to-[#0a3d7a]",
-    accentColor: "#4a9eff",
-    badge: "Most Popular",
-    carColor: "#1a2540",
-    specs: ["xDrive AWD", "Twin-scroll Turbo", "Sport Suspension"],
+    accent: "#4a9eff",
+    bodyColor: "#1a2540",
   },
   {
     id: "suv",
     category: "SAV",
-    name: "BMW X7",
-    tagline: "Commanding Presence. Boundless Luxury.",
-    horsepower: "523 hp",
-    acceleration: "4.7s",
-    topSpeed: "155 mph",
+    name: "X7",
+    power: "523 hp",
+    accel: "4.7s",
     price: "From $77,900",
-    gradient: "from-[#1a1a2e] to-[#0a0a18]",
-    accentColor: "#a8d4ff",
-    badge: "Flagship SAV",
-    carColor: "#111122",
-    specs: ["6-Seat Configuration", "Air Suspension", "22\" Wheels"],
+    accent: "#a8d4ff",
+    bodyColor: "#111122",
   },
   {
     id: "electric",
     category: "ELECTRIC",
-    name: "BMW iX",
-    tagline: "The Future Moves With You",
-    horsepower: "610 hp",
-    acceleration: "3.8s",
-    topSpeed: "130 mph",
+    name: "iX M60",
+    power: "610 hp",
+    accel: "3.8s",
     price: "From $87,100",
-    gradient: "from-[#0d1a3a] to-[#1c6ed4]/30",
-    accentColor: "#00d4ff",
-    badge: "Zero Emissions",
-    carColor: "#0d1520",
-    specs: ["324 mi Range", "350kW Charging", "iDrive 8"],
+    accent: "#00d4ff",
+    bodyColor: "#0d1520",
   },
   {
     id: "mseries",
     category: "M SERIES",
-    name: "BMW M8 Competition",
-    tagline: "Born on the Track. Built for the Road.",
-    horsepower: "617 hp",
-    acceleration: "3.0s",
-    topSpeed: "190 mph",
+    name: "M8 Comp.",
+    power: "617 hp",
+    accel: "3.0s",
     price: "From $130,500",
-    gradient: "from-[#2a0000] to-[#1a0a0a]",
-    accentColor: "#ff6b35",
-    badge: "Track Ready",
-    carColor: "#1a0808",
-    specs: ["M xDrive AWD", "8-speed M DCT", "Carbon Fiber Roof"],
+    accent: "#ff9a6c",
+    bodyColor: "#1a0808",
   },
 ];
 
-function CarSVG({ color, accent, index }: { color: string; accent: string; index: number }) {
-  const angles = [0, 15, -10, 5];
-  const angle = angles[index] || 0;
+function MiniCar({ color, accent }: { color: string; accent: string }) {
   return (
-    <svg viewBox="0 0 400 180" className="w-full h-full" style={{ transform: `rotate(${angle}deg)` }}>
+    <svg viewBox="0 0 320 140" className="w-full h-full" fill="none">
       <defs>
-        <linearGradient id={`cg${index}`} x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id={`g-${accent}`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor={color} />
-          <stop offset="100%" stopColor="#060608" />
+          <stop offset="100%" stopColor="#04040a" />
         </linearGradient>
-        <radialGradient id={`rg${index}`} cx="40%" cy="30%" r="60%">
-          <stop offset="0%" stopColor={accent} stopOpacity="0.5" />
-          <stop offset="100%" stopColor="transparent" />
-        </radialGradient>
       </defs>
-      {/* Glow */}
-      <ellipse cx="200" cy="155" rx="160" ry="10" fill={accent} opacity="0.08" />
-      {/* Car body */}
-      <path d="M 40 120 L 50 90 L 70 72 L 100 65 L 140 52 L 200 45 L 270 50 L 315 65 L 345 85 L 360 120 L 360 130 L 40 130 Z"
-        fill={`url(#cg${index})`} stroke={accent} strokeWidth="0.5" strokeOpacity="0.3" />
+      {/* Ground shadow */}
+      <ellipse cx="160" cy="120" rx="130" ry="8" fill={accent} opacity="0.07" />
+      {/* Body */}
+      <path d="M 28 98 L 36 72 L 58 55 L 92 46 L 126 36 L 195 32 L 248 38 L 282 55 L 298 80 L 304 98 L 304 108 L 28 108 Z"
+        fill={`url(#g-${accent})`} stroke={accent} strokeWidth="0.4" strokeOpacity="0.3" />
       {/* Roof */}
-      <path d="M 140 52 L 200 45 L 270 50 L 290 65 L 140 65 Z"
-        fill={color} opacity="0.6" />
+      <path d="M 126 36 L 195 32 L 248 38 L 265 55 L 126 55 Z" fill={color} opacity="0.6" />
       {/* Windows */}
-      <path d="M 145 64 L 195 48 L 230 48 L 230 64 Z" fill={accent} opacity="0.4" />
-      <path d="M 236 48 L 285 52 L 285 64 L 236 64 Z" fill={accent} opacity="0.35" />
+      <path d="M 132 53 L 190 35 L 218 35 L 218 53 Z" fill={accent} opacity="0.4" />
+      <path d="M 224 35 L 260 40 L 260 53 L 224 53 Z" fill={accent} opacity="0.35" />
       {/* DRL */}
-      <path d="M 348 86 L 360 100 L 358 115" stroke={accent} strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.9" />
+      <path d="M 292 58 L 303 78 L 302 100" stroke={accent} strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.9" />
       {/* Taillight */}
-      <path d="M 53 88 L 43 105" stroke="#cc3333" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.7" />
+      <path d="M 39 72 L 30 88" stroke="#cc3333" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.7" />
       {/* Front wheel */}
-      <circle cx="300" cy="130" r="28" fill="#080810" stroke={accent} strokeWidth="0.5" strokeOpacity="0.3" />
-      <circle cx="300" cy="130" r="22" fill="#111120" />
-      {[0, 72, 144, 216, 288].map((a, i) => (
-        <line key={i} x1={300} y1={130}
-          x2={300 + Math.cos(a * Math.PI / 180) * 20}
-          y2={130 + Math.sin(a * Math.PI / 180) * 20}
-          stroke={accent} strokeWidth="1.5" strokeOpacity="0.5" />
+      <circle cx="232" cy="109" r="24" fill="#080810" stroke={accent} strokeWidth="0.5" strokeOpacity="0.3" />
+      <circle cx="232" cy="109" r="17" fill="#111118" />
+      {[0, 60, 120, 180, 240, 300].map((a, i) => (
+        <line key={i} x1={232} y1={109}
+          x2={232 + Math.cos(a * Math.PI / 180) * 15}
+          y2={109 + Math.sin(a * Math.PI / 180) * 15}
+          stroke={accent} strokeWidth="1.2" strokeOpacity="0.55" />
       ))}
-      <circle cx="300" cy="130" r="5" fill={accent} opacity="0.8" />
+      <circle cx="232" cy="109" r="4" fill={accent} opacity="0.9" />
       {/* Rear wheel */}
-      <circle cx="105" cy="130" r="28" fill="#080810" stroke={accent} strokeWidth="0.5" strokeOpacity="0.3" />
-      <circle cx="105" cy="130" r="22" fill="#111120" />
-      {[0, 72, 144, 216, 288].map((a, i) => (
-        <line key={i} x1={105} y1={130}
-          x2={105 + Math.cos(a * Math.PI / 180) * 20}
-          y2={130 + Math.sin(a * Math.PI / 180) * 20}
-          stroke={accent} strokeWidth="1.5" strokeOpacity="0.5" />
+      <circle cx="90" cy="109" r="24" fill="#080810" stroke={accent} strokeWidth="0.5" strokeOpacity="0.3" />
+      <circle cx="90" cy="109" r="17" fill="#111118" />
+      {[0, 60, 120, 180, 240, 300].map((a, i) => (
+        <line key={i} x1={90} y1={109}
+          x2={90 + Math.cos(a * Math.PI / 180) * 15}
+          y2={109 + Math.sin(a * Math.PI / 180) * 15}
+          stroke={accent} strokeWidth="1.2" strokeOpacity="0.55" />
       ))}
-      <circle cx="105" cy="130" r="5" fill={accent} opacity="0.8" />
-      {/* Roof highlight */}
-      <path d="M 155 62 Q 215 50 272 56" stroke="rgba(255,255,255,0.08)" strokeWidth="1" fill="none" />
+      <circle cx="90" cy="109" r="4" fill={accent} opacity="0.9" />
+      {/* Body crease */}
+      <path d="M 36 84 Q 160 76 300 84" stroke="rgba(255,255,255,0.05)" strokeWidth="1" fill="none" />
     </svg>
-  );
-}
-
-function ModelCard({ model, index }: { model: typeof models[0]; index: number }) {
-  const [hovered, setHovered] = useState(false);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      className="relative group cursor-pointer rounded-2xl overflow-hidden border border-white/5 hover:border-white/10 transition-all duration-500"
-      style={{
-        background: "rgba(255,255,255,0.02)",
-        boxShadow: hovered ? `0 0 40px ${model.accentColor}20, 0 20px 60px rgba(0,0,0,0.5)` : "none",
-      }}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.12, duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      whileHover={{ y: -6 }}
-    >
-      {/* Card gradient bg */}
-      <div
-        className="absolute inset-0 opacity-30 transition-opacity duration-500 group-hover:opacity-50"
-        style={{ background: `linear-gradient(135deg, ${model.accentColor}10, transparent 60%)` }}
-      />
-
-      {/* Badge */}
-      <div className="absolute top-4 left-4 z-10">
-        <span
-          className="text-[10px] font-semibold tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
-          style={{
-            background: `${model.accentColor}20`,
-            color: model.accentColor,
-            border: `1px solid ${model.accentColor}30`,
-          }}
-        >
-          {model.badge}
-        </span>
-      </div>
-
-      {/* Category */}
-      <div className="absolute top-4 right-4 z-10">
-        <span className="text-[10px] font-medium tracking-[0.3em] text-white/30 uppercase">
-          {model.category}
-        </span>
-      </div>
-
-      {/* Car visualization */}
-      <div className="relative h-44 sm:h-48 flex items-center justify-center px-4 pt-10 overflow-hidden">
-        <motion.div
-          className="w-full h-full"
-          animate={hovered ? { scale: 1.05, y: -4 } : { scale: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-        >
-          <CarSVG color={model.carColor} accent={model.accentColor} index={index} />
-        </motion.div>
-        {/* Ambient glow */}
-        <motion.div
-          className="absolute bottom-2 left-[20%] right-[20%] h-8 rounded-full blur-xl"
-          style={{ background: model.accentColor }}
-          animate={{ opacity: hovered ? 0.15 : 0.06 }}
-          transition={{ duration: 0.4 }}
-        />
-      </div>
-
-      {/* Content */}
-      <div className="p-5 pt-0">
-        <div className="border-t border-white/5 pt-4 mb-4">
-          <h3 className="text-white font-bold text-xl mb-1">{model.name}</h3>
-          <p className="text-white/40 text-xs leading-relaxed">{model.tagline}</p>
-        </div>
-
-        {/* Specs */}
-        <div className="grid grid-cols-3 gap-2 mb-4">
-          {[
-            { icon: <Zap size={11} />, label: model.horsepower, sub: "Power" },
-            { icon: <Gauge size={11} />, label: model.acceleration, sub: "0-60" },
-            { icon: <Cpu size={11} />, label: model.topSpeed, sub: "Top Speed" },
-          ].map((spec) => (
-            <div
-              key={spec.sub}
-              className="text-center py-2 rounded-lg"
-              style={{ background: `${model.accentColor}08` }}
-            >
-              <div style={{ color: model.accentColor }} className="flex justify-center mb-0.5 opacity-70">
-                {spec.icon}
-              </div>
-              <p className="text-white text-xs font-semibold">{spec.label}</p>
-              <p className="text-white/30 text-[10px]">{spec.sub}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Feature tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {model.specs.map((s) => (
-            <span
-              key={s}
-              className="text-[9px] px-2 py-1 rounded-full border tracking-wide"
-              style={{ borderColor: `${model.accentColor}20`, color: `${model.accentColor}80` }}
-            >
-              {s}
-            </span>
-          ))}
-        </div>
-
-        {/* Price + CTA */}
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-white/30 text-[10px] uppercase tracking-wider">Starting</p>
-            <p className="text-white font-semibold text-sm">{model.price}</p>
-          </div>
-          <motion.button
-            className="flex items-center gap-1.5 text-xs font-semibold tracking-wide px-4 py-2 rounded-full"
-            style={{
-              background: `${model.accentColor}15`,
-              color: model.accentColor,
-              border: `1px solid ${model.accentColor}25`,
-            }}
-            whileHover={{ scale: 1.05, background: `${model.accentColor}25` }}
-            whileTap={{ scale: 0.97 }}
-          >
-            Explore
-            <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
-          </motion.button>
-        </div>
-      </div>
-    </motion.div>
   );
 }
 
 export default function FeaturedModels() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [hovered, setHovered] = useState<string | null>(null);
 
   return (
-    <section className="relative py-24 lg:py-32 bg-[#0a0a0a] overflow-hidden" id="models">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#1c6ed4]/20 to-transparent" />
-      <div className="absolute inset-0 grid-pattern opacity-40" />
+    <section className="relative py-28 lg:py-36 bg-[#0a0a0a] overflow-hidden" id="models">
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+      <div className="absolute inset-0 grid-pattern opacity-30" />
 
-      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-12">
+      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-16">
         {/* Header */}
-        <div ref={ref} className="text-center mb-16">
-          <motion.div
-            className="flex items-center justify-center gap-3 mb-4"
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.6 }}
+        <div ref={ref} className="mb-14">
+          <motion.p
+            className="text-[#4a9eff] text-xs tracking-[0.5em] uppercase font-medium mb-3"
+            initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
           >
-            <div className="w-8 h-[1px] bg-[#4a9eff]/50" />
-            <span className="text-[#4a9eff] text-xs font-medium tracking-[0.4em] uppercase">
-              Model Lineup
-            </span>
-            <div className="w-8 h-[1px] bg-[#4a9eff]/50" />
-          </motion.div>
+            — Model Lineup
+          </motion.p>
           <motion.h2
-            className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4"
-            initial={{ opacity: 0, y: 30 }}
+            className="text-5xl lg:text-7xl font-black tracking-tight"
+            initial={{ opacity: 0, y: 24 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.15, duration: 0.7 }}
+            transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
             <span className="text-white">Choose Your </span>
             <span className="gradient-text">Perfection</span>
           </motion.h2>
-          <motion.p
-            className="text-white/40 max-w-xl mx-auto text-sm leading-relaxed"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.25, duration: 0.6 }}
-          >
-            From exhilarating sport coupes to pioneering electric vehicles, every BMW
-            represents the pinnacle of automotive craftsmanship.
-          </motion.p>
         </div>
 
-        {/* Model cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-5">
-          {models.map((model, i) => (
-            <ModelCard key={model.id} model={model} index={i} />
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          {models.map((m, i) => (
+            <motion.div
+              key={m.id}
+              className="relative rounded-2xl border overflow-hidden cursor-pointer"
+              style={{
+                borderColor: hovered === m.id ? `${m.accent}30` : "rgba(255,255,255,0.05)",
+                background: "rgba(255,255,255,0.02)",
+                boxShadow: hovered === m.id ? `0 20px 50px ${m.accent}12` : "none",
+              }}
+              initial={{ opacity: 0, y: 40 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.1, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+              onMouseEnter={() => setHovered(m.id)}
+              onMouseLeave={() => setHovered(null)}
+              whileHover={{ y: -5 }}
+            >
+              {/* Accent top strip */}
+              <div
+                className="h-px transition-all duration-500"
+                style={{ background: hovered === m.id ? `linear-gradient(90deg, ${m.accent}, transparent)` : "transparent" }}
+              />
+
+              {/* Car visual */}
+              <div
+                className="relative h-44 flex items-end justify-center px-4 pb-2 pt-6 overflow-hidden transition-all duration-500"
+                style={{
+                  background: hovered === m.id
+                    ? `radial-gradient(ellipse at 50% 20%, ${m.accent}0d, transparent 65%)`
+                    : "transparent",
+                }}
+              >
+                <motion.div
+                  className="w-full h-full"
+                  animate={{ scale: hovered === m.id ? 1.04 : 1, y: hovered === m.id ? -4 : 0 }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <MiniCar color={m.bodyColor} accent={m.accent} />
+                </motion.div>
+
+                {/* Category badge */}
+                <div className="absolute top-4 right-4">
+                  <span className="text-[9px] font-bold tracking-[0.3em] uppercase"
+                    style={{ color: `${m.accent}80` }}>
+                    {m.category}
+                  </span>
+                </div>
+              </div>
+
+              {/* Info */}
+              <div className="px-5 pb-5 pt-2">
+                <div className="border-t border-white/5 pt-4 mb-4">
+                  <h3 className="text-white font-black text-2xl tracking-tight">
+                    BMW {m.name}
+                  </h3>
+                </div>
+
+                {/* Two key specs */}
+                <div className="flex gap-3 mb-5">
+                  <div className="flex-1 py-2.5 rounded-xl text-center"
+                    style={{ background: `${m.accent}08` }}>
+                    <p className="text-white font-bold text-sm">{m.power}</p>
+                    <p className="text-white/30 text-[10px] mt-0.5">Power</p>
+                  </div>
+                  <div className="flex-1 py-2.5 rounded-xl text-center"
+                    style={{ background: `${m.accent}08` }}>
+                    <p className="text-white font-bold text-sm">{m.accel}</p>
+                    <p className="text-white/30 text-[10px] mt-0.5">0 – 60</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <p className="text-white/50 text-sm font-medium">{m.price}</p>
+                  <motion.button
+                    className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-full"
+                    style={{
+                      background: `${m.accent}12`,
+                      color: m.accent,
+                      border: `1px solid ${m.accent}22`,
+                    }}
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Explore <ArrowRight size={11} />
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          className="text-center mt-14"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.6, duration: 0.6 }}
-        >
-          <motion.button
-            className="px-8 py-3.5 border border-white/10 hover:border-[#4a9eff]/40 text-white/60 hover:text-white text-sm font-medium rounded-full transition-all duration-300 tracking-wide"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            View Complete Lineup →
-          </motion.button>
-        </motion.div>
       </div>
     </section>
   );

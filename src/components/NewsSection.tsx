@@ -2,199 +2,141 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Calendar, ArrowRight, Tag } from "lucide-react";
+import { Calendar, ArrowRight } from "lucide-react";
 
 const articles = [
   {
     category: "LAUNCH",
-    tag: "New Model",
-    title: "BMW Neue Klasse: The Electric Revolution Begins in 2025",
-    excerpt:
-      "BMW&apos;s groundbreaking next-generation electric architecture promises 30% greater range, 40% faster charging, and a completely reimagined digital experience.",
+    title: "BMW Neue Klasse Arrives in 2025",
     date: "Nov 28, 2025",
-    readTime: "4 min read",
     color: "#4a9eff",
-    gradient: "from-[#0a1a3a] to-[#080810]",
+    gradient: "from-[#0a1a3a]/60 to-transparent",
   },
   {
     category: "MOTORSPORT",
-    tag: "Racing",
-    title: "BMW M Hybrid V8 Claims Victory at 24 Hours of Le Mans",
-    excerpt:
-      "The BMW M Team clinched a historic win at Le Mans with their V8-powered hybrid prototype, demonstrating the performance potential of BMW M hybrid technology.",
+    title: "BMW M Wins 24 Hours of Le Mans",
     date: "Nov 14, 2025",
-    readTime: "3 min read",
-    color: "#ff6b35",
-    gradient: "from-[#2a0a00] to-[#080810]",
+    color: "#ff9a6c",
+    gradient: "from-[#2a0a00]/60 to-transparent",
   },
   {
     category: "TECHNOLOGY",
-    tag: "Innovation",
-    title: "BMW Personal Copilot: AI-Powered Autonomous Driving Preview",
-    excerpt:
-      "BMW unveils its most advanced Level 3 autonomy system yet, featuring AI that learns driver preferences and adapts to individual driving styles over time.",
+    title: "BMW Personal Copilot: Level 3 Preview",
     date: "Oct 30, 2025",
-    readTime: "5 min read",
     color: "#00d4ff",
-    gradient: "from-[#001a2a] to-[#080810]",
+    gradient: "from-[#001a2a]/60 to-transparent",
   },
 ];
 
 const events = [
-  { date: "DEC 12", title: "BMW Art Car Exhibition", location: "New York, USA", type: "Exhibition" },
-  { date: "JAN 7", title: "CES 2026 — BMW Keynote", location: "Las Vegas, USA", type: "Technology" },
-  { date: "MAR 4", title: "Geneva Motor Show Debut", location: "Geneva, Switzerland", type: "Launch" },
-  { date: "MAY 15", title: "BMW M Festival 2026", location: "Nürburgring, Germany", type: "Event" },
+  { date: "DEC\n12", title: "BMW Art Car Exhibition", location: "New York", type: "Exhibition" },
+  { date: "JAN\n 7", title: "CES 2026 — BMW Keynote", location: "Las Vegas", type: "Tech" },
+  { date: "MAR\n 4", title: "Geneva Motor Show Debut", location: "Geneva", type: "Launch" },
+  { date: "MAY\n15", title: "BMW M Festival 2026", location: "Nürburgring", type: "Racing" },
 ];
 
 export default function NewsSection() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="relative py-24 lg:py-32 bg-[#080810] overflow-hidden" id="news">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#1c6ed4]/20 to-transparent" />
-      <div className="absolute inset-0 dot-pattern opacity-20" />
+    <section ref={ref} className="relative py-28 lg:py-36 bg-[#0a0a0a] overflow-hidden" id="news">
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+      <div className="absolute inset-0 dot-pattern opacity-15" />
 
-      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-12">
+      <div className="relative max-w-[1440px] mx-auto px-6 lg:px-16">
+
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
+        <div className="flex items-end justify-between gap-6 mb-14">
           <div>
-            <motion.div
-              className="flex items-center gap-3 mb-4"
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-            >
-              <div className="w-8 h-[1px] bg-[#4a9eff]/50" />
-              <span className="text-[#4a9eff] text-xs font-medium tracking-[0.4em] uppercase">
-                News & Events
-              </span>
-            </motion.div>
-            <motion.h2
-              className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight"
-              initial={{ opacity: 0, y: 30 }}
+            <motion.p className="text-[#4a9eff] text-xs tracking-[0.5em] uppercase font-medium mb-3"
+              initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}>
+              — News & Events
+            </motion.p>
+            <motion.h2 className="text-5xl lg:text-7xl font-black tracking-tight"
+              initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.15 }}
-            >
+              transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}>
               <span className="text-white">Latest </span>
               <span className="gradient-text">Updates</span>
             </motion.h2>
           </div>
           <motion.button
-            className="flex-shrink-0 flex items-center gap-2 text-white/50 text-sm hover:text-white transition-colors"
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
+            className="hidden sm:flex items-center gap-2 text-white/35 hover:text-white text-xs transition-colors mb-1"
+            initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.3 }}
-            whileHover={{ x: 3 }}
-          >
-            View All News <ArrowRight size={14} />
+            whileHover={{ x: 3 }}>
+            All News <ArrowRight size={13} />
           </motion.button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-12">
-          {articles.map((article, i) => (
+        {/* Articles */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+          {articles.map((a, i) => (
             <motion.article
-              key={article.title}
-              className={`group relative rounded-2xl border border-white/5 hover:border-white/10 overflow-hidden cursor-pointer transition-all duration-500 bg-gradient-to-br ${article.gradient}`}
-              initial={{ opacity: 0, y: 40 }}
+              key={a.title}
+              className={`group relative rounded-2xl border border-white/5 hover:border-white/10 overflow-hidden cursor-pointer bg-gradient-to-b ${a.gradient}`}
+              style={{ background: "rgba(255,255,255,0.02)" }}
+              initial={{ opacity: 0, y: 32 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.15 * i + 0.3, duration: 0.7 }}
-              whileHover={{ y: -4, boxShadow: `0 20px 60px ${article.color}10` }}
+              transition={{ delay: i * 0.1 + 0.2, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -4, boxShadow: `0 20px 50px ${a.color}10` }}
             >
-              {/* Color accent top bar */}
-              <div
-                className="h-[2px] w-0 group-hover:w-full transition-all duration-500"
-                style={{ background: `linear-gradient(90deg, ${article.color}, transparent)` }}
-              />
+              {/* Color bar on hover */}
+              <div className="h-[2px] w-0 group-hover:w-full transition-all duration-500"
+                style={{ background: `linear-gradient(90deg, ${a.color}, transparent)` }} />
 
               <div className="p-6">
-                {/* Category + tag */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <Tag size={11} style={{ color: article.color }} />
-                    <span
-                      className="text-[10px] font-semibold tracking-[0.25em] uppercase"
-                      style={{ color: article.color }}
-                    >
-                      {article.category}
-                    </span>
-                  </div>
-                  <span
-                    className="text-[9px] px-2 py-1 rounded-full"
-                    style={{
-                      background: `${article.color}10`,
-                      color: article.color,
-                      border: `1px solid ${article.color}20`,
-                    }}
-                  >
-                    {article.tag}
-                  </span>
-                </div>
+                <span className="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 block"
+                  style={{ color: a.color }}>
+                  {a.category}
+                </span>
 
-                <h3 className="text-white font-bold text-base leading-snug mb-3 line-clamp-2 group-hover:text-white/90 transition-colors">
-                  {article.title}
+                <h3 className="text-white font-bold text-base leading-snug mb-5 group-hover:text-white/90">
+                  {a.title}
                 </h3>
 
-                <p className="text-white/35 text-xs leading-relaxed line-clamp-3 mb-5"
-                  dangerouslySetInnerHTML={{ __html: article.excerpt }}
-                />
-
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3 text-white/25 text-[10px]">
-                    <div className="flex items-center gap-1">
-                      <Calendar size={10} />
-                      {article.date}
-                    </div>
-                    <span>·</span>
-                    <span>{article.readTime}</span>
+                  <div className="flex items-center gap-1.5 text-white/25 text-[10px]">
+                    <Calendar size={10} />
+                    {a.date}
                   </div>
-                  <motion.div
-                    className="flex items-center gap-1 text-xs font-medium"
-                    style={{ color: article.color }}
-                    whileHover={{ x: 3 }}
-                  >
+                  <motion.span className="flex items-center gap-1 text-xs font-medium"
+                    style={{ color: a.color }} whileHover={{ x: 3 }}>
                     Read <ArrowRight size={11} />
-                  </motion.div>
+                  </motion.span>
                 </div>
               </div>
             </motion.article>
           ))}
         </div>
 
-        {/* Events calendar */}
+        {/* Events */}
         <motion.div
           className="p-6 lg:p-8 rounded-2xl border border-white/5 glass"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.6, duration: 0.6 }}
-        >
-          <h3 className="text-white font-bold text-lg mb-6">Upcoming Events</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-            {events.map((event, i) => (
+          transition={{ delay: 0.55, duration: 0.65 }}>
+          <p className="text-white/40 text-xs tracking-[0.35em] uppercase font-medium mb-5">Upcoming Events</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+            {events.map((e, i) => (
               <motion.div
-                key={event.title}
-                className="group flex gap-4 p-4 rounded-xl border border-white/5 hover:border-[#4a9eff]/20 transition-all duration-200 cursor-pointer hover:bg-[#4a9eff]/3"
-                initial={{ opacity: 0, x: -20 }}
+                key={e.title}
+                className="flex gap-3 p-4 rounded-xl border border-white/5 hover:border-[#4a9eff]/20 hover:bg-[#4a9eff]/3 transition-all duration-200 cursor-pointer"
+                initial={{ opacity: 0, x: -16 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.7 + i * 0.08 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-[#1c6ed4]/10 border border-[#1c6ed4]/20 flex flex-col items-center justify-center">
-                  <span className="text-[#4a9eff] font-black text-sm leading-none">
-                    {event.date.split(" ")[0]}
-                  </span>
-                  <span className="text-[#4a9eff]/60 text-[9px] leading-none mt-0.5">
-                    {event.date.split(" ")[1]}
-                  </span>
+                transition={{ delay: 0.65 + i * 0.07 }}
+                whileTap={{ scale: 0.98 }}>
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-[#1c6ed4]/10 border border-[#1c6ed4]/20 flex flex-col items-center justify-center">
+                  {e.date.split("\n").map((line, j) => (
+                    <span key={j} className={j === 0 ? "text-[#4a9eff] font-black text-xs leading-none" : "text-[#4a9eff]/60 text-[9px] leading-none"}>
+                      {line.trim()}
+                    </span>
+                  ))}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-white text-sm font-medium leading-tight truncate mb-1">
-                    {event.title}
-                  </p>
-                  <p className="text-white/30 text-[10px] truncate">{event.location}</p>
-                  <span className="inline-block mt-1.5 text-[9px] px-2 py-0.5 rounded-full bg-[#4a9eff]/8 text-[#4a9eff]/60 border border-[#4a9eff]/12">
-                    {event.type}
-                  </span>
+                  <p className="text-white/80 text-xs font-medium leading-tight truncate mb-1">{e.title}</p>
+                  <p className="text-white/25 text-[10px] truncate">{e.location}</p>
                 </div>
               </motion.div>
             ))}
