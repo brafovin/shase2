@@ -1,127 +1,68 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function HeroSection() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
-
   return (
-    <section ref={ref} className="relative h-screen min-h-[680px] overflow-hidden bg-black">
+    <section className="relative h-screen min-h-[700px] overflow-hidden bg-black">
 
-      {/* BMW M4 Photo */}
-      <motion.div className="absolute inset-0" style={{ y: imgY }}>
-        <Image
-          src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1920&q=85"
-          alt="BMW M4"
-          fill
-          priority
-          className="object-cover object-center scale-105"
-          sizes="100vw"
-        />
-        {/* Gradient overlay — left heavy for text, dark at bottom */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-black/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30" />
-      </motion.div>
+      {/* BMW M4 photo */}
+      <Image
+        src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1920&q=85"
+        alt="BMW M4 Competition"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
+      />
 
-      {/* Content */}
+      {/* Left-to-right dark fade so headline is legible */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
+      {/* Bottom fade — blends into next section */}
+      <div className="absolute bottom-0 inset-x-0 h-56 bg-gradient-to-t from-[#050505] to-transparent" />
+
+      {/* Content — anchored to bottom so it scrolls away cleanly */}
       <motion.div
-        className="relative z-10 h-full max-w-[1440px] mx-auto px-6 lg:px-16 flex flex-col justify-center"
-        style={{ y: textY, opacity }}
+        className="absolute inset-x-0 bottom-0 pb-24 lg:pb-32 px-8 sm:px-12 lg:px-20 max-w-[1440px] mx-auto"
+        initial={{ opacity: 0, y: 28 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Eyebrow */}
-        <motion.div
-          className="flex items-center gap-3 mb-5"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-        >
-          <div className="w-6 h-px bg-[#4a9eff]" />
-          <span className="text-[#4a9eff] text-xs tracking-[0.5em] uppercase font-medium">
-            BMW M4 Competition
-          </span>
-        </motion.div>
+        <p className="text-white/40 text-[11px] tracking-[0.55em] uppercase mb-5 font-medium">
+          BMW M4 Competition · 2025
+        </p>
 
-        {/* Headline */}
-        <motion.h1
-          className="text-[13vw] sm:text-[10vw] lg:text-[8vw] font-black leading-[0.88] tracking-tight"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        >
+        <h1 className="text-[15vw] sm:text-[11vw] lg:text-[90px] xl:text-[100px] font-black leading-[0.86] tracking-[-0.02em] mb-9">
           <span className="block text-white">The Ultimate</span>
           <span
             className="block"
             style={{
-              background: "linear-gradient(90deg, #ffffff 0%, #a8d4ff 60%, #4a9eff 100%)",
+              background: "linear-gradient(100deg, #fff 0%, #b8d8ff 50%, #4a9eff 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
           >
             Driving Machine.
           </span>
-        </motion.h1>
+        </h1>
 
-        {/* CTAs */}
-        <motion.div
-          className="flex gap-3 mt-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.6 }}
-        >
+        <div className="flex items-center gap-4">
           <motion.button
-            className="relative px-7 py-3.5 bg-gradient-to-r from-[#1c6ed4] to-[#4a9eff] text-white text-sm font-semibold rounded-full overflow-hidden shimmer-btn"
-            whileHover={{ scale: 1.04, boxShadow: "0 0 28px rgba(74,158,255,0.45)" }}
+            className="px-9 py-3.5 bg-white text-black text-sm font-bold tracking-wide rounded-sm hover:bg-white/90 transition-colors"
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
           >
-            Explore Models
+            Discover
           </motion.button>
           <motion.button
-            className="px-7 py-3.5 border border-white/20 hover:border-white/50 text-white text-sm font-medium rounded-full backdrop-blur-sm transition-all duration-300"
-            whileHover={{ scale: 1.04 }}
+            className="px-9 py-3.5 border border-white/30 text-white text-sm font-medium tracking-wide rounded-sm hover:border-white/60 hover:bg-white/5 transition-all"
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
           >
-            Book a Test Drive
+            Configure
           </motion.button>
-        </motion.div>
-
-        {/* Key specs — minimal chips */}
-        <motion.div
-          className="flex gap-4 mt-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.3, duration: 0.6 }}
-        >
-          {[
-            { val: "503", unit: "HP" },
-            { val: "3.9s", unit: "0-60" },
-            { val: "155", unit: "MPH" },
-          ].map((s) => (
-            <div key={s.unit} className="flex items-baseline gap-1.5 border-l border-white/15 pl-4">
-              <span className="text-white font-black text-xl leading-none">{s.val}</span>
-              <span className="text-[#4a9eff] text-[10px] font-semibold tracking-widest uppercase">{s.unit}</span>
-            </div>
-          ))}
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll cue */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8 }}
-        style={{ opacity }}
-      >
-        <motion.div animate={{ y: [0, 7, 0] }} transition={{ duration: 1.4, repeat: Infinity }}>
-          <ChevronDown size={20} className="text-white/20" />
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   );
